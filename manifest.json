@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Zentime",
+  "version": "1.0",
+  "description": "Blocking website",
+  "permissions": [],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
