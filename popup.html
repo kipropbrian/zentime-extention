@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Zentime</title>
+    <style>
+      body {
+        width: 300px;
+        padding: 15px;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+      #websiteName {
+        font-size: 16px;
+        flex-grow: 1;
+      }
+      .button {
+        padding: 8px;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+        background: #f0f0f0;
+      }
+      .button:hover {
+        background: #e0e0e0;
+      }
+      .button svg {
+        vertical-align: middle;
+        color: #444;
+      }
+      .button:hover svg {
+        color: #000;
+      }
+      .blocked {
+        color: red;
+      }
+      #timeRemaining {
+        font-size: 14px;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="websiteName">Loading...</div>
+      <button id="toggleBlock" class="button">
+        <span id="blockIcon">
+          <svg
+            id="pauseIcon"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+          </svg>
+          <svg
+            id="playIcon"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            style="display: none"
+          >
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div id="timeRemaining"></div>
+    <script src="popup.js"></script>
+  </body>
+</html>

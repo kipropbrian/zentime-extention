@@ -2,9 +2,27 @@
   "manifest_version": 3,
   "name": "Zentime",
   "version": "1.0",
-  "description": "Blocking website",
-  "permissions": [],
+  "description": "Blocking website for 1 hour",
+  "permissions": ["activeTab", "storage", "webNavigation", "scripting"],
   "action": {
     "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": ["<all_urls>"],
+  "icons": {
+    "36": "icons/monk36.png",
+    "128": "icons/monk-128.png",
+    "512": "icons/monk-512.png"
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_1",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
   }
 }
