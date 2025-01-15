@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", async function () {
   const websiteNameEl = document.getElementById("websiteName");
   const toggleBlockBtn = document.getElementById("toggleBlock");
-  const blockIcon = document.getElementById("blockIcon");
   const timeRemainingEl = document.getElementById("timeRemaining");
 
   // Get current tab URL
@@ -29,11 +28,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
+  /**
+   * Updates the time remaining display element with the given milliseconds.
+   * @param {number} ms - The time remaining in milliseconds.
+   */
   function updateTimeRemaining(ms) {
     const minutes = Math.ceil(ms / 60000);
     timeRemainingEl.textContent = `Blocked for ${minutes} more minutes`;
   }
 
+  /**
+   * Toggles the blocking state of the current website.
+   */
   toggleBlockBtn.addEventListener("click", async function () {
     const { blockedSites = {} } = await chrome.storage.local.get(
       "blockedSites"
@@ -57,12 +63,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         },
       };
       await chrome.storage.local.set({ blockedSites: newBlockedSites });
-      blockIcon.textContent = "▶️";
-      blockIcon.innerHTML = `
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8 5v14l11-7L8 5z" fill="currentColor"/>
-        </svg>
-      `;
+      document.getElementById("pauseIcon").style.display = "none";
+      document.getElementById("playIcon").style.display = "block";
       websiteNameEl.classList.add("blocked");
       updateTimeRemaining(3600000);
     }

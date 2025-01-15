@@ -1,25 +1,15 @@
-// First, declare rules to redirect blocked sites to our blocking page
+// Constants for rule IDs
+const BLOCK_RULE_ID = 1;
+
+// Initialize rules when the extension is installed or updated
 chrome.runtime.onInstalled.addListener(() => {
+  // Clear any existing dynamic rules
   chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: [1], // Remove existing rule if any
-    addRules: [
-      {
-        id: 1,
-        priority: 1,
-        action: {
-          type: "redirect",
-          redirect: { extensionPath: "/blocked.html" },
-        },
-        condition: {
-          urlFilter: "*",
-          resourceTypes: ["main_frame"],
-        },
-      },
-    ],
+    removeRuleIds: [BLOCK_RULE_ID],
   });
 });
 
-// Keep track of blocked sites and update redirect rules
+// Keep track of blocked sites and update blocking rules
 async function updateBlockedSites() {
   const { blockedSites } = await chrome.storage.local.get("blockedSites");
   if (!blockedSites) return;
@@ -40,26 +30,24 @@ async function updateBlockedSites() {
     await chrome.storage.local.set({ blockedSites: updatedSites });
   }
 
-  // Create URL pattern for each blocked site
+  // Create URL patterns for blocked sites
   const patterns = Object.keys(updatedSites).map(
     (hostname) => `*://${hostname}/*`
   );
 
-  // Update blocking rules
+  // Update blocking rules for blocked sites
   await chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: [1],
+    removeRuleIds: [BLOCK_RULE_ID], // Remove existing rules
     addRules: patterns.length
       ? [
+          // Rule to block all resources for blocked sites
           {
-            id: 1,
+            id: BLOCK_RULE_ID,
             priority: 1,
-            action: {
-              type: "redirect",
-              redirect: { extensionPath: "/blocked.html" },
-            },
+            action: { type: "block" },
             condition: {
               urlFilter: patterns.join("|"),
-              resourceTypes: ["main_frame"],
+              resourceTypes: ["main_frame", "script", "image", "stylesheet"],
             },
           },
         ]
