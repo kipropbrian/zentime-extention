@@ -32,7 +32,7 @@ async function updateBlockedSites() {
 
   // Create URL patterns for blocked sites
   const patterns = Object.keys(updatedSites).map(
-    (hostname) => `*://${hostname}/*`
+    (hostname) => `||${hostname}/`
   );
 
   // Update blocking rules for blocked sites
