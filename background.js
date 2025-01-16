@@ -53,6 +53,51 @@ async function updateBlockedSites() {
         ]
       : [],
   });
+
+  // Unregister Service Workers for blocked hosts
+  await unregisterServiceWorkersForBlockedHosts(updatedSites);
+}
+
+// Unregister Service Workers for blocked hosts
+async function unregisterServiceWorkersForBlockedHosts(blockedSites) {
+  const blockedHosts = Object.keys(blockedSites);
+
+  // Get all tabs and check for Service Workers
+  const tabs = await chrome.tabs.query({});
+  for (const tab of tabs) {
+    if (tab.url) {
+      const url = new URL(tab.url);
+      if (blockedHosts.includes(url.hostname)) {
+        // Inject a content script to unregister the Service Worker
+        await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          func: unregisterServiceWorkerForHost,
+          args: [url.hostname],
+        });
+      }
+    }
+  }
+}
+
+// Function to unregister Service Workers for a specific host
+function unregisterServiceWorkerForHost(hostname) {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (const registration of registrations) {
+        if (new URL(registration.scope).hostname === hostname) {
+          registration.unregister().then((success) => {
+            if (success) {
+              console.log(`Unregistered Service Worker for ${hostname}`);
+            } else {
+              console.log(
+                `Failed to unregister Service Worker for ${hostname}`
+              );
+            }
+          });
+        }
+      }
+    });
+  }
 }
 
 // Listen for changes to blocked sites
