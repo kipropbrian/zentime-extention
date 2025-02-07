@@ -1,6 +1,6 @@
 # Zentime Extension
 
-Zentime Extension is a simple tool for blocking websites for one hour.
+Zentime Extension is a simple tool for blocking websites for 10 hours.
 
 ## Features
 

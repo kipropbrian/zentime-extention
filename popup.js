@@ -1,3 +1,4 @@
+const MAX_BLOCK_TIME = 36000000; // 10 hours in milliseconds
 document.addEventListener("DOMContentLoaded", async function () {
   const websiteNameEl = document.getElementById("websiteName");
   const toggleBlockBtn = document.getElementById("toggleBlock");
@@ -102,18 +103,18 @@ document.addEventListener("DOMContentLoaded", async function () {
       websiteNameEl.classList.remove("blocked");
       timeRemainingEl.textContent = "";
     } else {
-      // Block for 1 hour
+      // Block for 10 hour
       const newBlockedSites = {
         ...blockedSites,
         [hostname]: {
-          endTime: Date.now() + 3600000, // 1 hour in milliseconds
+          endTime: Date.now() + MAX_BLOCK_TIME, // 10 hour in milliseconds
         },
       };
       await chrome.storage.local.set({ blockedSites: newBlockedSites });
       blockIconSvg.style.display = "block"; // Show block icon
       playIcon.style.display = "none"; // Hide play icon
       websiteNameEl.classList.add("blocked");
-      updateTimeRemaining(3600000);
+      updateTimeRemaining(MAX_BLOCK_TIME);
     }
 
     // Refresh the list of blocked sites

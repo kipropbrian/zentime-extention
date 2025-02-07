@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Zentime",
   "version": "1.0",
-  "description": "Blocking websites for 1 hour",
+  "description": "Blocking websites for 10 hour",
   "permissions": [
     "activeTab",
     "storage",
